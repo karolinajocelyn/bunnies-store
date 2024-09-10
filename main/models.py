@@ -2,8 +2,8 @@ from django.db import models
 
 # Create your models here.
 class Product(models.Model):
-    # Represents the name of the person
-    name = models.CharField(max_length = 100)
+    # Represents the name of the artist
+    artist_name = models.CharField(max_length = 100)
     
     # Represents the name of the album
     album_title = models.CharField(max_length = 100)
@@ -16,4 +16,4 @@ class Product(models.Model):
     
     # This string method defines how the object is represented in the admin panel and elsewhere
     def __str__(self):
-        return self.name
+        return self.album_title
