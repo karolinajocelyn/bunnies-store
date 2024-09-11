@@ -1,4 +1,9 @@
 from django.shortcuts import render
 
 def show_main(request):
-    return render(request, 'main.html')
+    context= {
+        'name': 'Karolina Jocelyn',
+        'class': 'PBP D'
+    }
+    
+    return render(request, 'main.html', context)
