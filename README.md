@@ -35,4 +35,4 @@ sumber: https://dcloud.co.id/blog/apa-itu-git.html#:~:text=Git%20adalah%20alat%2
 Berdasarkan pengetahuan saya dari apa yang dipelajari di tutorial 0 dan 1, Django cukup komprehensif, terstruktur, dan mudah dipahami karena banyaknya komponen dalam pembuatan web seperti templates, views, models, dan routing. Dengan fitur-fitur Django yang sudah built-in, saya menjadi lebih mudah mempelajari Django tanpa merasa *overwhelmed* dengan banyaknya komponen teknis. Django juga memiliki dokumentasi yang kuat sehingga mudah dipelajari.
 
 5. Mengapa model pada Django disebut sebagai ORM?
-Model pada Django disebut sebagai ORM (Object-Relational Mapper) karena memungkinkan kita untuk berinteraksi dengan database seperti SQL, tetapi dalam bahasa Python sehingga kita mampu mengambil dan memanipulasi data pada database kita.
+Model pada Django disebut sebagai ORM (Object-Relational Mapper) karena memungkinkan kita untuk berinteraksi dengan database seperti SQL, tetapi dalam bahasa Python sehingga kita mampu mengambil dan memanipulasi data pada database kita. Django memetakan antara objek python dan tabel database relasional.
