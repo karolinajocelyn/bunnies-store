@@ -37,7 +37,7 @@ Git adalah sebuah alat software development yang berfungsi sebagai sistem kontro
 - memungkinkan branching sehingga *developer* bisa mengembangkan fitur baru di luar branch/proyek utama.
 - bisa digunakan sebagai backup karena ada history dari commit
 
-sumber: https://dcloud.co.id/blog/apa-itu-git.html#:~:text=Git%20adalah%20alat%20software%20development,code)%20secara%20efisien%20dan%20kolaboratif.
+sumber: https://dcloud.co.id/blog/apa-itu-git.html#:~:text=Git%20adalah%20alat%20software%20development,code)%20secara%20efisien%20dan%20kolaboratif
 
 4. Menurut Anda, dari semua framework yang ada, mengapa framework Django dijadikan permulaan pembelajaran pengembangan perangkat lunak?
    
