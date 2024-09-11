@@ -3,6 +3,8 @@
 hi! welcome to my repository~
 this is my first web-based store where i sell multiple k-pop merch and albums. initially, this was supposed to sell only new jeans stuff but it expanded to other groups as well. we sell **authentic** products at a lower price rate. our motto? **from fans, to fans**. hope you enjoy shopping here!
 
+deployment url: karolina-jocelyn-bunniesstore3.pbp.cs.ui.ac.id
+
 ====================
 
 ## QnA's
