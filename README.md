@@ -4,8 +4,6 @@ hi! welcome to my repository~
 this is my first web-based store where i sell multiple k-pop merch and albums!
 deployment url: http://karolina-jocelyn-bunniesstore.pbp.cs.ui.ac.id
 
-====================
-
 ## QnA's
 
 ### Tugas 2
