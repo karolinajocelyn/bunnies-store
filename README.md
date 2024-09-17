@@ -68,16 +68,20 @@ Namun, XML juga memiliki beberapa kelebihan dibandingkan dengan JSON, salah satu
 sumber: https://www.imaginarycloud.com/blog/json-vs-xml
 
 3. Jelaskan fungsi dari method is_valid() pada form Django dan mengapa kita membutuhkan method tersebut?
+
 Method `is_valid()` digunakan untuk memvalidasi input yang diisi oleh user pada form web sesuai dengan field peminta input, contohnya adalah `IntegerField` harus berupa bilangan bulat. Method ini mereturn True apabila datanya valid dan menaruh data pada atribut `cleaned_data`.
 sumber: https://www.javatpoint.com/django-form-validation
 
-4. Mengapa kita membutuhkan csrf_token saat membuat form di Django? Apa yang dapat terjadi jika kita tidak menambahkan csrf_token pada form Django? Bagaimana hal tersebut dapat dimanfaatkan oleh penyerang?
+4. Mengapa kita membutuhkan csrf_token saat membuat form di Django? 
+
+Apa yang dapat terjadi jika kita tidak menambahkan csrf_token pada form Django? Bagaimana hal tersebut dapat dimanfaatkan oleh penyerang?
 CSRF attack atau *Cross-Site Request Forgery* merupakan suatu serangan yang tujuannya adalah mengubah *submission* input dari user, seperti mengubah/menghapus record, submit transaksi, pembelian produk, pengubahan *password*, dan lainnya. CSRF attack akan terjadi pada web yang tidak mampu membedakan antara *request* yang valid dan yang tidak valid (*forged*) yang dikontrol oleh penyerang.
 
 Untuk mengatasi hal tersebut, harus ada CSRF Token, yaitu sebuah *random secure* token sebagai lapisan validasi tambahan yang unik per sesi pengisian form dan terdiri dari nilai yang besar agar sulit ditebak oleh penyerang. Jika kita tidak menambahkan CSRF token, maka penyerang dapat memanfaatkan sesi login dari pengguna yang sah untuk melakukan penyerangan tanpa sepengetahuan dari pengguna. Contohnya adalah ketika login bank tanpa token CSRF, penyerang bisa mengirim *request* ke bank untuk transfer uang ke akun penyerang.
 sumber: https://www.synopsys.com/glossary/what-is-csrf.html#:~:text=A%20CSRF%20token%20is%20a,token%20for%20every%20user%20session.
 
 5. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
+
 Melanjutkan dari apa yang dilakukan pada tugas 2, 
 - Saya mengimplementasi bentuk form dengan membuat main.html dan create_product.html. Saya membuat page baru untuk membuat produk dan mengatur tampilan produk yang telah didaftarkan pada main.html. Selain itu, saya juga menambahkan base.html pada directory bunnies-store/templates (root folder).
 - Saya mengubah primary key dari integer menjadi UUID agar setiap object yang didaftarkan memiliki ID sendiri, bukan hanya integer pada models.py.
