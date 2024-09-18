@@ -91,3 +91,9 @@ python3 manage.py migrate`
 - Function-function baru ini ditambahkan ke urls.py dan saya juga membuat path baru ke page creat_product.html
 - Saya membuat function show_xml, show_json, show_xml_by_id, dan show_json_by_id pada views.py dan juga menambahkan URL menuju page masing-masing pada `urlpatterns` di urls.py
 - Untuk memastikan semuanya berjalan dengan lancar, saya juga `runserver` dan membuat *request* baru dengan method `GET` pada URL-URL yang telah didaftarkan.
+
+6. Berikut adalah *screenshot* dari Postman untuk URL dari xml dan json.
+![Alt text](<show XML.png>)
+![Alt text](<show XML by ID.png>)
+![Alt text](<show JSON.png>)
+![Alt text](<show JSON by ID.png>)
