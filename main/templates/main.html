@@ -35,14 +35,23 @@
         margin-top: 0px;
     }
 
+    .button-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+        margin-bottom: 20px;
+        margin-top: 10px;
+    }
+
     .products {
         width: 100%;
         max-width: 1000px;
         display: flex;
-        flex-wrap: wrap; /* Allows wrapping of items onto new lines */
-        justify-content: center; /* Center the buttons */
-        align-items: center; /* Align them in the middle */
-        gap: 30px; /* Add spacing between the buttons */
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        gap: 30px;
         margin-top: 20px;
     }
 
@@ -51,11 +60,11 @@
         padding: 15px;
         border-radius: 8px;
         box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-        width: 23%; /* Set to a percentage to allow 4 items in a row */
+        width: 23%;
         margin-bottom: 20px;
         word-wrap: break-word;
         overflow-wrap: break-word;
-        height: 150px; /* Fixed height */
+        height: 150px;
         display: flex;
         flex-direction: column;
         gap: 10px;
@@ -65,19 +74,19 @@
         text-align: center;
         margin: 0;
         font-size: 1.2em;
-        margin-bottom: 1px; /* Reduce the bottom margin */
+        margin-bottom: 1px;
     }
-    
+
     .product-box p {
         margin-top: 0;
-        margin: 0px 0; /* Reduce the margins between paragraphs */
+        margin: 0px 0;
         text-align: center;
         font-size: 0.9em;
     }
 
     .product-box-content {
-        overflow-y: auto; /* Make the content scrollable if it exceeds the box height */
-        height: 150px; /* Fixed height for content area */
+        overflow-y: auto;
+        height: 150px;
     }
 
     button {
@@ -87,11 +96,20 @@
         border: none;
         border-radius: 5px;
         cursor: pointer;
-        margin-bottom: 20px;
     }
 
     button:hover {
         background-color: #87CEEB;
+    }
+
+    /* Style untuk menempatkan Last login session di bawah */
+    .footer {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        text-align: center;
+        padding: 10px 0;
+        background-color: rgba(255, 255, 255, 0.8);
     }
 </style>
 
@@ -99,10 +117,18 @@
 <h1>🐰bunnies store🐰</h1>
 <h5>by {{ name }} from {{ class }}</h5>
 
-<!-- New Product button -->
-<a href="{% url 'main:create_product' %}">
-    <button>new product</button>
-</a>
+<!-- Button container for New Product and Logout buttons -->
+<div class="button-container">
+    <!-- New Product button -->
+    <a href="{% url 'main:create_product' %}">
+        <button>New Product</button>
+    </a>
+
+    <!-- Logout button -->
+    <a href="{% url 'main:logout' %}">
+        <button>Logout</button>
+    </a>
+</div>
 
 <!-- Product container -->
 <div class="products">
@@ -117,6 +143,16 @@
         </div>
     </div>
     {% endfor %}
+    {% endif %}
+</div>
+
+<!-- Last login session placed at the bottom of the page -->
+<div class="footer">
+    Last login session: 
+    {% if last_login %}
+        {{ last_login }}
+    {% else %}
+        No login session available
     {% endif %}
 </div>
 

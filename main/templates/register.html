@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block meta %}
+<title>Register</title>
+{% endblock meta %}
+
+{% block content %}
+
+<style>
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        flex-direction: column;
+        background-image: url({% static 'nwj.png' %});
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        overflow-y: auto;
+        position: relative;
+    }
+
+    form {
+        background-color: #f9f9f9;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        width: 300px;
+        margin-bottom: 20px;
+    }
+
+    h1 {
+        text-align: center;
+        background-color: rgba(255, 255, 255, 0.8);
+        padding: 6px;
+        border-radius: 8px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+    }
+
+    table {
+        margin: 0 auto;
+    }
+
+    input {
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        width: 100%; /* Agar input menyesuaikan ukuran form */
+        margin-bottom: 10px;
+    }
+
+    .button-container {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    button {
+        padding: 10px 20px;
+        background-color: #ADD8E6;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    button:hover {
+        background-color: #87CEEB;
+    }
+
+    .back-button {
+        padding: 10px 20px;
+        background-color: #ADD8E6;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        text-decoration: none;
+        font-size: 16px;
+        text-align: center;
+    }
+
+    .back-button:hover {
+        background-color: #87CEEB;
+    }
+
+    ul {
+        list-style-type: none;
+        padding: 0;
+        margin-top: 20px;
+        color: red;
+    }
+
+    li {
+        margin-bottom: 5px;
+    }
+
+</style>
+
+<div class="login">
+  <h1>Register</h1>
+
+  <form method="POST">
+    {% csrf_token %}
+    <table>
+      {{ form.as_table }}
+      <tr>
+        <td></td>
+        <td>
+          <!-- Submit Button -->
+          <div class="button-container">
+            <button type="submit">Register</button>
+            <!-- Back Button -->
+            <a href="{% url 'main:show_main' %}" class="back-button">Back</a>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </form>
+
+  {% if messages %}
+  <ul>
+    {% for message in messages %}
+    <li>{{ message }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+</div>
+
+{% endblock content %}
