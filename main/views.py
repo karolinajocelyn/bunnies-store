@@ -20,11 +20,14 @@ def show_landing_page(request):
 def show_main(request):
     products = Product.objects.filter(user=request.user)
     
+    # Get the 'last_login' cookie, if not found, set it to None
+    last_login = request.COOKIES.get('last_login', None)
+    
     context= {
         'name': request.user.username,
         'class': 'PBP D',
         'products': products,
-        'last_login': request.COOKIES['last_login']
+        'last_login': last_login  # This will be None if the cookie doesn't exist
     }
     return render(request, 'main.html', context)
 
