@@ -97,3 +97,60 @@ python3 manage.py migrate`
 ![Alt text](<show XML by ID.png>)
 ![Alt text](<show JSON.png>)
 ![Alt text](<show JSON by ID.png>)
+
+### Tugas 4
+1. Apa perbedaan antara `HttpResponseRedirect()` dan `redirect()`?
+
+`HttpResponseRedirect()` merupakan suatu class dalam Django yang digunakan untuk me-redirect ke URL tertentu sehingga kita harus menyediakan URL secara explicit dalam argumen/parameternya. Contohnya seperti `return HttpResponseRedirect('/home/')`. 
+
+`redirect()` merupakan shortcut dari Django untuk melakukan redirect dengan lebih fleksibel sehingga kita bisa memberikan URL atau nama dari view sebagai argumen. Contohnya seperti `redirect('home')`.
+
+2. Jelaskan cara kerja penghubungan model Product dengan User!
+Dengan menggunakan `django.contrib.auth.models.User`, kita bisa menghubungkan Product dengan User dengan foreign key sehingga setiap produk itu terhubung dengan satu pengguna. Dengan menambahkan kode:
+
+`user = models.ForeignKey(User, on_delete=models.CASCADE)`
+
+kita menunjukkan relasi dari banyak-ke-satu antara Product dengan User.
+
+3. Apa perbedaan antara authentication dan authorization, apakah yang dilakukan saat pengguna login? Jelaskan bagaimana Django mengimplementasikan kedua konsep tersebut.
+
+Authentication adalah proses verifikasi identitas pengguna, yaitu mengecek apakah pengguna benar-benar sesuai dengan data yang diinput dalam suatu form. Contohnya seperti mencocokkan username dan password yang diberikan di database. Django juga menyediakan middleware untuk menyimpan status login sehingga detail login bisa diakses melalui request.user. 
+
+Authorization adalah proses memeriksa hak akses pengguna setelah identitas mereka diverifikasi. Ini menentukan apakah pengguna yang terautentikasi memiliki izin untuk mengakses sumber daya tertentu. Contohnya seperti memeriksa apakah pengguna ini memiliki izin untuk mengedit atau mengubah suatu fitur. Django menggunakan decorators seperti @login_required untuk menambahkan permissions fitur yang bisa diakses pengguna.
+
+4. Bagaimana Django mengingat pengguna yang telah login? Jelaskan kegunaan lain dari cookies dan apakah semua cookies aman digunakan?
+
+Django mengingat pengguna yang telah login dengan menggunakan mekanisme session. Setiap kali pengguna login, Django membuat ID sesi yang disimpan sebagai cookie pada browser pengguna. Saat pengguna melakukan request, cookie ini dikirimkan kembali ke server, memungkinkan Django mengenali pengguna yang sedang login. Informasi ini bisa diakses melalui request.user. Maka, Django dapat melacak dan mengelola sesi pengguna yang telah login.
+
+5. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
+
+- Saya menghubungkan Product dengan User dengan membuat ForeignKey sehingga setiap Product terkait dengan User tertentu.
+- Saya melakukan makemigrations dan migrate untuk membuat tabel database.
+- Mengimplementasikan login logout dengan sistem autentikasi Django dengan decorator @login_required
+- Memastikan agar pengguna yang login bisa dikenali di seluruh halaman melalui request.user.
+
+
+### Tugas 5
+
+1. Jika terdapat beberapa CSS selector untuk suatu elemen HTML, jelaskan urutan prioritas pengambilan CSS selector tersebut!
+
+Jika ada beberapa CSS selector yang diterapkan pada elemen yang sama, prioritas ditentukan oleh spesifisitasnya. Selector ID (#) memiliki prioritas tertinggi, diikuti oleh class (.) dan kemudian elemen HTML biasa. Jika dua selector memiliki spesifisitas yang sama, urutan penulisan dalam CSS juga berpengaruh, di mana selector yang ditulis terakhir akan diterapkan.
+
+2. Mengapa responsive design menjadi konsep yang penting dalam pengembangan aplikasi web? Berikan contoh aplikasi yang sudah dan belum menerapkan responsive design!
+
+Responsive design memastikan tampilan dan fungsi aplikasi web tetap optimal di berbagai perangkat dan ukuran layar, baik di desktop maupun perangkat mobile. Hal ini penting untuk meningkatkan user experience dan aksesibilitas. Contoh aplikasi yang sudah menerapkan responsive design adalah YouTube, sementara beberapa situs web lama yang hanya didesain untuk desktop belum sepenuhnya responsive.
+
+3. Jelaskan perbedaan antara margin, border, dan padding, serta cara untuk mengimplementasikan ketiga hal tersebut!
+
+Margin adalah jarak luar elemen yang memisahkan elemen tersebut dari elemen lain, border adalah garis pembatas yang mengelilingi elemen, sedangkan padding adalah ruang di dalam elemen antara konten dan border. Ketiga elemen ini bisa diatur secara terpisah menggunakan properti CSS untuk memperbaiki tata letak halaman.
+
+4. Jelaskan konsep flex box dan grid layout beserta kegunaannya!
+
+Flexbox adalah layout satu dimensi yang memungkinkan elemen diatur secara fleksibel dalam baris atau kolom, memudahkan penyesuaian tata letak pada berbagai ukuran layar. Grid layout adalah layout dua dimensi yang memungkinkan elemen disusun dalam baris dan kolom secara bersamaan, berguna untuk tata letak yang lebih kompleks dan terstruktur.
+
+5. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial)!
+
+- Saya membuat navigation bar yang isinya adalah logout, home, see products, dan hello "username"
+- Saya menambahkan functions pada views.py untuk delete_product, edit_product, dan sebagainya serta menghubungkannya dengan url tertentu di urls.py
+- Membuat template html dengan tailwind.
+- Melakukan git push dan deploy
