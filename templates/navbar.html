@@ -1,0 +1,87 @@
+<!-- Navigation Bar -->
+<nav class="bg-white bg-opacity-80 shadow-md fixed w-full z-10 top-0">
+    <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+      <div class="relative flex items-center justify-between h-16">
+        <!-- Logo or Brand Name -->
+        <div class="flex-shrink-0">
+          <a href="{% url 'main:show_main' %}" class="text-pink-400 font-extrabold text-2xl">
+            🐰 Bunnies Store
+          </a>
+        </div>
+        
+        <!-- Desktop Navbar Links (Hidden on Mobile) -->
+        <div class="hidden sm:block sm:ml-6">
+          <div class="flex space-x-4">
+            <!-- Home Link -->
+            <a href="{% url 'main:show_main' %}" class="text-gray-700 hover:text-pink-500 px-3 py-2 rounded-md text-sm font-medium">
+              Home
+            </a>
+            <!-- See Products Link that scrolls to the product section -->
+            <a href="#products-section" class="text-gray-700 hover:text-pink-500 px-3 py-2 rounded-md text-sm font-medium">
+              See Products
+            </a>
+          </div>
+        </div>
+
+        <!-- Right-aligned: Greeting and Logout -->
+        <div class="hidden sm:flex sm:items-center">
+          <!-- Hello, {{ username }} -->
+          <p class="text-gray-700 font-medium mr-4">Hello, {{ user.username }}</p>
+          <!-- Logout button -->
+          <a href="{% url 'main:logout' %}" class="bg-red-500 text-white font-semibold py-2 px-4 rounded-md shadow-lg hover:bg-red-600 transition duration-200">
+            Logout
+          </a>
+        </div>
+
+        <!-- Mobile Menu Button (Hamburger Icon) -->
+        <div class="sm:hidden flex items-center">
+          <button onclick="toggleMobileMenu()" type="button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-pink-500 focus:outline-none">
+            <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Mobile Menu (Initially hidden) -->
+    <div class="sm:hidden" id="mobile-menu" style="display: none;">
+      <div class="px-2 pt-2 pb-3 space-y-1">
+        <a href="{% url 'main:show_main' %}" class="text-gray-700 hover:text-pink-500 block px-3 py-2 rounded-md text-base font-medium">
+          Home
+        </a>
+        <a href="#products-section" class="text-gray-700 hover:text-pink-500 block px-3 py-2 rounded-md text-base font-medium">
+          See Products
+        </a>
+        <a href="{% url 'main:logout' %}" class="text-gray-700 hover:text-pink-500 block px-3 py-2 rounded-md text-base font-medium">
+          Logout
+        </a>
+      </div>
+    </div>
+  </nav>
+  
+  <!-- Add some top margin to your body or main content so it doesn’t get hidden behind the navbar -->
+  <style>
+    body {
+      padding-top: 4rem; /* Adjust to match the navbar height */
+    }
+  
+    /* Optional: Sticky Navbar */
+    .sticky {
+      position: -webkit-sticky;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+  </style>
+  
+  <script>
+    function toggleMobileMenu() {
+      var menu = document.getElementById('mobile-menu');
+      if (menu.style.display === "none") {
+        menu.style.display = "block";
+      } else {
+        menu.style.display = "none";
+      }
+    }
+  </script>
