@@ -10,7 +10,6 @@
     .gradient-purple { background: linear-gradient(to right, #a18cd1, #fbc2eb); }
     .gradient-blue { background: linear-gradient(to right, #89f7fe, #66a6ff); }
     .gradient-green { background: linear-gradient(to right, #a8e6cf, #dcedc1); }
-    .gradient-yellow { background: linear-gradient(to right, #fef9d7, #d299c2); }
 
     /* Add spacing and padding to product boxes */
     .product-box {
@@ -25,55 +24,197 @@
 <div class="fixed top-0 left-0 w-full h-full -z-1 bg-cover bg-scroll bg-center" style="background-image: url('{% static 'pinkk.jpeg' %}');"></div>
 
 <div class="relative z-10">
-    <div class="flex flex-col justify-center items-center min-h-screen " >
+    <div class="flex flex-col justify-center items-center min-h-screen ">
         <!-- Title Section -->
         <h1 class="text-white text-4xl lg:text-5xl font-semibold mb-2">Welcome to</h1>
         <h2 class="text-5xl lg:text-7xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pink-600 via-purple-600 to-purple-800 mb-8">Bunnies Store</h2>
     
         <!-- Buttons -->
         <div class="flex space-x-4">
-            <a href="{% url 'main:create_product' %}" class="bg-blue-500 text-white font-semibold py-2 px-6 rounded-lg shadow-lg hover:bg-blue-600 transition duration-200">Add Products</a>
+            <button onclick="showModal()" class="bg-blue-500 text-white font-semibold py-2 px-6 rounded-lg shadow-lg hover:bg-blue-600 transition duration-200">Add Product</button>
             <a href="#products-section" class="bg-pink-500 text-white font-semibold py-2 px-6 rounded-lg shadow-lg hover:bg-pink-600 transition duration-200">See Products</a>
         </div>
     </div>
     
     <!-- Products Section (Scrollable) -->
-    <section id="products-section" class="min-h-screen  py-12 flex justify-center items-center">
-        <div class="container text-center">
-            {% if products %}
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {% for product in products %}
-                        <div class="product-box {% cycle 'gradient-pink' 'gradient-purple' 'gradient-blue' 'gradient-green' 'gradient-yellow' %}">
-                            <h3 class="text-xl font-semibold mb-2">{{ product.album_title }}</h3>
-                            <p class="text-white mb-2">Artist: {{ product.artist_name }}</p>
-                            <p class="text-white mb-2">Price: Rp{{ product.price }}</p>
-                            <p class="text-white">{{ product.description }}</p>
-                            <!-- Edit and Delete buttons with white background -->
-                            <div class="flex justify-center mt-4 space-x-4">
-                                <a href="{% url 'main:edit_product' product.id %}" class="bg-white text-black px-3 py-1 rounded-lg shadow hover:bg-gray-200">Edit</a>
-                                <a href="{% url 'main:delete_product' product.id %}" class="bg-white text-black px-3 py-1 rounded-lg shadow hover:bg-gray-200">Delete</a>
-                            </div>
-                        </div>
-                    {% endfor %}
-                </div>
-            {% else %}
-                <div class="flex flex-col justify-center items-center">
-                    <img src="{% static 'rabbit.png' %}" alt="No Products" class="w-32 h-32 mb-4">
-                    <p class="text-center text-gray-500 text-xl">No products available</p>
-                </div>
-            {% endif %}
+    <section id="products-section" class="min-h-screen py-12 flex justify-center items-center">
+        <div class="container mx-auto">
+            <!-- Grid for Product Display -->
+            <div id="product_cards" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
         </div>
     </section>
-    
-    <!-- Last login session placed at the bottom of the screen -->
-    <div class="fixed bottom-0 w-full text-center bg-white bg-opacity-50 py-2">
-        Last login session:
-        {% if last_login %}
-            {{ last_login|slice:":19" }}
-        {% else %}
-            No login session available
-        {% endif %}
+
+    <!-- Modal for adding products -->
+    <div id="crudModal" tabindex="-1" aria-hidden="true" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50 overflow-x-hidden overflow-y-auto transition-opacity duration-300 ease-out">
+        <div id="crudModalContent" class="relative bg-white rounded-lg shadow-lg w-5/6 sm:w-3/4 md:w-1/2 lg:w-1/3 mx-4 sm:mx-0 transform scale-95 opacity-0 transition-transform transition-opacity duration-300 ease-out">
+            <!-- Modal header -->
+            <div class="relative p-4 border-b rounded-t flex items-center justify-center">
+                <h3 class="text-xl font-extrabold text-center bg-white bg-opacity-80 py-3 px-4 rounded-lg shadow-lg">
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-purple-400">Create Product</span>
+                </h3>
+                <button type="button" class="absolute right-4 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 inline-flex items-center" id="closeModalBtn">
+                    <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414z" clip-rule="evenodd"></path>
+                    </svg>
+                    <span class="sr-only">Close modal</span>
+                </button>
+            </div>
+            
+            <!-- Modal body -->
+            <div class="px-6 py-4 space-y-6">
+                <form id="productForm" method="POST" class="space-y-6">
+                    {% csrf_token %}
+                    
+                    <!-- Artist Name Field -->
+                    <div>
+                        <label for="artist-name" class="block text-sm font-medium text-gray-700">Artist Name</label>
+                        <input type="text" id="artist-name" name="artist_name" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-pink-500 focus:border-pink-500 sm:text-sm" required>
+                    </div>
+            
+                    <!-- Album Title Field -->
+                    <div>
+                        <label for="album-title" class="block text-sm font-medium text-gray-700">Album Title</label>
+                        <input type="text" id="album-title" name="album_title" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-pink-500 focus:border-pink-500 sm:text-sm" required>
+                    </div>
+            
+                    <!-- Price Field -->
+                    <div>
+                        <label for="price" class="block text-sm font-medium text-gray-700">Price</label>
+                        <input type="number" id="price" name="price" min="0" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-pink-500 focus:border-pink-500 sm:text-sm" required>
+                    </div>
+            
+                    <!-- Description Field -->
+                    <div>
+                        <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
+                        <textarea id="description" name="description" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-pink-500 focus:border-pink-500 sm:text-sm" required></textarea>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Modal footer -->
+            <div class="flex flex-col space-y-2 md:flex-row md:space-y-0 md:space-x-2 p-6 border-t border-gray-200 rounded-b justify-center md:justify-end">
+                <!-- Cancel Button -->
+                <button type="button" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg" id="cancelButton">Cancel</button>
+                <!-- Submit Button -->
+                <button type="submit" class="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-lg" id="submitProductEntry">Save</button>
+            </div>
+        </div>
     </div>
 </div>
+
+<script>
+    // Function to get product entries from the server
+    async function getProductEntries() {
+        const response = await fetch("{% url 'main:show_json' %}");
+        return await response.json();
+    }
+
+    // Function to refresh product entries on the page
+    async function refreshProductEntries() {
+        const productEntries = await getProductEntries();
+        const productContainer = document.getElementById("product_cards");
+
+        // Array of gradient classes
+        const gradients = ['gradient-pink', 'gradient-purple', 'gradient-blue', 'gradient-green'];
+        let gradientIndex = 0; // Counter to loop through the gradient classes
+        
+        // Clear previous product entries
+        productContainer.innerHTML = "";
+
+        if (productEntries.length === 0) {
+            productContainer.innerHTML = `
+                <div class="flex flex-col items-center justify-center min-h-[24rem] p-6">
+                    <img src="{% static 'rabbit.png' %}" alt="No Products" class="w-32 h-32 mb-4"/>
+                    <p class="text-center text-gray-600 mt-4">No products available in the store.</p>
+                </div>
+            `;
+        } else {
+            productEntries.forEach(item => {
+                // Use the current gradient and cycle through
+                const currentGradient = gradients[gradientIndex];
+                gradientIndex = (gradientIndex + 1) % gradients.length; // Increment and reset if needed
+
+                const htmlString = `
+                    <div class="product-box ${currentGradient} shadow-md rounded-lg p-6">
+                        <h3 class="font-bold text-xl mb-2">${item.fields.album_title}</h3>
+                        <p class="text-white mb-2">Artist: ${item.fields.artist_name}</p>
+                        <p class="text-white mb-2">Price: Rp${item.fields.price}</p>
+                        <p class="text-white">${item.fields.description}</p>
+                        <div class="flex justify-center mt-4 space-x-4">
+                            <a href="/edit-product/${item.pk}" class="bg-transparent text-white px-3 py-1 border border-white rounded-lg shadow hover:bg-white hover:text-black">Edit</a>
+                            <a href="/delete-product/${item.pk}" class="bg-transparent text-white px-3 py-1 border border-white rounded-lg shadow hover:bg-white hover:text-black">Delete</a>
+                        </div>
+                    </div>
+                `;
+                productContainer.innerHTML += htmlString;
+            });
+        }
+    }
+
+    // Function to sanitize and submit the form data
+    async function addProductEntry() {
+        const form = document.getElementById('productForm');
+        
+        // Get all form field values
+        const artistName = DOMPurify.sanitize(document.getElementById('artist-name').value);
+        const albumTitle = DOMPurify.sanitize(document.getElementById('album-title').value);
+        const price = DOMPurify.sanitize(document.getElementById('price').value);
+        const description = DOMPurify.sanitize(document.getElementById('description').value);
+
+        // Create a FormData object manually with sanitized values
+        const formData = new FormData();
+        formData.append('artist_name', artistName);
+        formData.append('album_title', albumTitle);
+        formData.append('price', price);
+        formData.append('description', description);
+        formData.append('csrfmiddlewaretoken', '{{ csrf_token }}'); // Add the CSRF token
+
+        // Send form data to the server using fetch
+        const response = await fetch("{% url 'main:add_product_entry_ajax' %}", {
+            method: "POST",
+            body: formData,
+        });
+
+        if (response.ok) {
+            alert("Product added successfully!");
+            refreshProductEntries();  // Refresh product list
+            hideModal();  // Close the modal
+            form.reset();  // Reset the form after submission
+        } else {
+            alert("Failed to add product.");
+        }
+    }
+
+    // Event listener for the submit button
+    document.getElementById("submitProductEntry").addEventListener("click", (e) => {
+        e.preventDefault();
+        addProductEntry();
+    });
+
+    // Call the function to load product entries when the page loads
+    document.addEventListener("DOMContentLoaded", refreshProductEntries);
+
+    // Functions to show and hide the modal
+    function showModal() {
+        document.getElementById('crudModal').classList.remove('hidden');
+        setTimeout(() => {
+            document.getElementById('crudModalContent').classList.remove('opacity-0', 'scale-95');
+            document.getElementById('crudModalContent').classList.add('opacity-100', 'scale-100');
+        }, 50);
+    }
+
+    function hideModal() {
+        document.getElementById('crudModalContent').classList.remove('opacity-100', 'scale-100');
+        document.getElementById('crudModalContent').classList.add('opacity-0', 'scale-95');
+        setTimeout(() => {
+            document.getElementById('crudModal').classList.add('hidden');
+        }, 150);
+    }
+
+    // Close modal on cancel button click
+    document.getElementById("cancelButton").addEventListener("click", hideModal);
+    // Close modal on the close icon button click
+    document.getElementById("closeModalBtn").addEventListener("click", hideModal);
+</script>
 
 {% endblock content %}

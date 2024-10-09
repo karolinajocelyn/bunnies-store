@@ -3,33 +3,42 @@ from django.forms import ModelForm
 from .models import Product
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth.models import User
+from django.utils.html import strip_tags
 
 class ProductForm(ModelForm):
     class Meta:
-        model = Product  # This is the model the form is based on
-        fields = ['artist_name', 'album_title', 'price', 'description']  # Include the fields you want to display in the form
+        model = Product  # Link to your Product model
+        fields = ['album_title', 'artist_name', 'price', 'description']  # Specify the fields
 
-        # Optional: Customize widgets for form fields
-        widgets = {
-            'artist_name': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Enter the artist name',
-            }),
-            'album_title': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Enter the album title',
-            }),
-            'price': forms.NumberInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Enter the price',
-                'min': 0
-            }),
-            'description': forms.Textarea(attrs={
-                'class': 'form-control',
-                'placeholder': 'Enter the album description',
-                'rows': 3,
-            }),
-        }
+    # Clean and sanitize album_title
+    def clean_album_title(self):
+        album_title = self.cleaned_data.get("album_title")
+        # Strip any HTML tags for security reasons
+        cleaned_album_title = strip_tags(album_title)
+        return cleaned_album_title
+
+    # Clean and sanitize artist_name
+    def clean_artist_name(self):
+        artist_name = self.cleaned_data.get("artist_name")
+        # Strip any HTML tags for security reasons
+        cleaned_artist_name = strip_tags(artist_name)
+        return cleaned_artist_name
+
+    # Clean and sanitize description
+    def clean_description(self):
+        description = self.cleaned_data.get("description")
+        # Strip any HTML tags for security reasons
+        cleaned_description = strip_tags(description)
+        return cleaned_description
+
+    # Optionally, you can also validate price if needed
+    def clean_price(self):
+        price = self.cleaned_data.get("price")
+        # Example validation: price should be a positive number
+        if price < 0:
+            raise forms.ValidationError("Price cannot be negative.")
+        return price
+
         
 class CustomAuthenticationForm(AuthenticationForm):
     username = forms.CharField(widget=forms.TextInput(attrs={

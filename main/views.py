@@ -4,12 +4,15 @@ from django.contrib import messages
 from django.shortcuts import render, redirect, reverse   # Tambahkan import redirect di baris ini
 from main.forms import ProductForm, CustomAuthenticationForm, CustomUserCreationForm
 from main.models import Product
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.core import serializers
 from django.contrib.auth.decorators import login_required
 import datetime
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
+from django.utils.html import strip_tags
 
 def show_landing_page(request):
     if request.user.is_authenticated:
@@ -95,21 +98,47 @@ def register(request):
     context = {'form': form}
     return render(request, 'register.html', context)
 
-
 def login_user(request):
     if request.method == 'POST':
         form = CustomAuthenticationForm(data=request.POST)  # Use the custom form
         if form.is_valid():
             user = form.get_user()
             login(request, user)
-            return redirect('main:show_main')
+            response = HttpResponseRedirect(reverse("main:show_main"))
+            response.set_cookie('last_login', str(datetime.datetime.now()))
+            return response
+        else:
+            messages.error(request, "Invalid username or password. Please try again.")
     else:
-        form = CustomAuthenticationForm()  # Use the custom form
-        
-    return render(request, 'login.html', {'form': form})
+        form = CustomAuthenticationForm()  # Initialize the form for GET requests
+
+    context = {'form': form}
+    return render(request, 'login.html', context)
 
 def logout_user(request):
     logout(request)
     response = HttpResponseRedirect(reverse('main:show_landing_page'))
     response.delete_cookie('last_login')
     return redirect('main:show_landing_page')
+
+@csrf_exempt
+@require_POST
+def add_product_entry_ajax(request):
+    if request.method == "POST":
+        artist_name = strip_tags(request.POST.get('artist_name'))
+        album_title = strip_tags(request.POST.get('album_title'))
+        price = strip_tags(request.POST.get('price'))
+        description = strip_tags(request.POST.get('description'))
+
+        # Assuming user is already logged in and request.user is available
+        product = Product.objects.create(
+            artist_name=artist_name,
+            album_title=album_title,
+            price=price,
+            description=description,
+            user=request.user  # Attach the product to the logged-in user
+        )
+
+        return JsonResponse({"message": "Product added successfully"}, status=201)
+
+    return JsonResponse({"error": "Invalid request"}, status=400)

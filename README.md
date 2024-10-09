@@ -129,7 +129,6 @@ Django mengingat pengguna yang telah login dengan menggunakan mekanisme session.
 - Mengimplementasikan login logout dengan sistem autentikasi Django dengan decorator @login_required
 - Memastikan agar pengguna yang login bisa dikenali di seluruh halaman melalui request.user.
 
-
 ### Tugas 5
 
 1. Jika terdapat beberapa CSS selector untuk suatu elemen HTML, jelaskan urutan prioritas pengambilan CSS selector tersebut!
@@ -154,3 +153,32 @@ Flexbox adalah layout satu dimensi yang memungkinkan elemen diatur secara fleksi
 - Saya menambahkan functions pada views.py untuk delete_product, edit_product, dan sebagainya serta menghubungkannya dengan url tertentu di urls.py
 - Membuat template html dengan tailwind.
 - Melakukan git push dan deploy
+
+### Tugas 6
+1. Jelaskan manfaat dari penggunaan JavaScript dalam pengembangan aplikasi web!
+
+Dalam pengembangan aplikasi berbasis web, JavaScript memungkinkan pengembangan website lebih interaktif dengan konten dinamis yang memperbarui tanpa reload, seperti pada Google Maps. JavaScript juga biasanya dijalankan di sisi client/browser sehingga dapat memproses data langsung di komputer user tanpa harus mengirimkan kembali ke server. JavaScript juga mendukung validasi input pengguna di browser sebelum data dikirimkan ke server sehingga mengurangi beban server. JavaScript juga mendukung penggunaan AJAX (*Asynchronous JavaScript dan XML*) yang membuat aplikasi web memuat data dari server tanpa harus *reload* ulang seluruh halaman. Selain itu, JavaScript dapat digunakan untuk aplikasi mobile, game berbasis web, dan menjalankan server dengan Node.js. Ini membuatnya fleksibel, ringan di server, serta didukung komunitas aktif​.
+
+Sumber: https://www.niagahoster.co.id/blog/javascript-adalah/
+
+2. Jelaskan fungsi dari penggunaan `await` ketika kita menggunakan `fetch()`! Apa yang akan terjadi jika kita tidak menggunakan `await`?
+
+`await` dalam penggunaan `fetch()` berfungsi untuk menunggu sampai operasi pengambilan data sudah selesai sebelum melanjutkan eksekusi kode berikutnya. Jika `await` tidak digunakan, maka kode setelah `fetch()` akan berjalan sebelum data berhasil diambil, sehingga bisa saja terjadi akses ke data yang belum tersedia dan memicu error saat memproses data yang belum selesai diambil.
+
+3. Mengapa kita perlu menggunakan decorator `csrf_exempt` pada view yang akan digunakan untuk AJAX POST?
+
+Decorator csrf_exempt digunakan untuk menonaktifkan mekanisme CSRF (Cross-Site Request Forgery) pada view tertentu, misalnya pada AJAX POST. Secara default, Django mewajibkan setiap permintaan POST untuk menyertakan token CSRF demi alasan keamanan. Namun, untuk endpoint tertentu yang tidak membutuhkan verifikasi CSRF (seperti API yang diakses melalui AJAX), decorator ini dapat diterapkan untuk menghindari error dan memungkinkan permintaan AJAX POST berjalan tanpa token CSRF.
+
+Sumber: https://docs.djangoproject.com/id/5.1/howto/csrf/
+
+4. Pada tutorial PBP minggu ini, pembersihan data input pengguna dilakukan di belakang (backend) juga. Mengapa hal tersebut tidak dilakukan di frontend saja?
+
+Pembersihan data input pengguna tidak hanya dilakukan pada frontend karena validasi input di frontend mudah dihindari dan dimanipulasi oleh user, contohnya seperti menonaktifkan JavaScript. Maka dari itu, dilakukanlah validasi input di backend yang lebih aman karena backend adalah tempat kontrol penuh yang dapat mencegah data berbahaya atau tidak valid masuk ke sistem. Backend juga dapat memberikan perlindungan dari serangan seperti XSS (*Cross-Site Scripting*) yang dilakukan pada tutorial.
+
+5. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial)!
+
+- Menambahkan @csrf_exempt dalam views.py untuk function `add_product_entry_ajax` untuk menghindari masalah token CSRF pada POST.
+- Mempersiapkan template HTML seperti pada tutorial 5 dimana kita membuat button yang akan mengirimkan data input ProductForm menggunakan AJAX.
+- Menggunakan event klik, `fetch()` dan `await` untuk mengirimkan data ke backend dan menunggu.
+- Menambahkan pembersihan dengan `strip_tags` pada views.py ke function `add_product_entry_ajax()` agar bisa melindungi dari input yang menghasilkan XSS.
+- Menambahkan function-function di <script> main.html agar dapat menambahkan produk, refresh halaman, dan lainnya.
